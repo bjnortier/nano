@@ -292,7 +292,11 @@ module.exports = exports = nano = function database_module(cfg) {
         delete rh.server;
         delete rh['content-length'];
 
-        try { parsed = JSON.parse(b); } catch (err) { parsed = b; }
+        if (opts.dont_parse) {
+          parsed = b; 
+        } else {
+          try { parsed = JSON.parse(b); } catch (err) { parsed = b; }
+        }
 
         if (status_code >= 200 && status_code < 400) {
           log({err: null, body: parsed, headers: rh});
@@ -1032,7 +1036,7 @@ module.exports = exports = nano = function database_module(cfg) {
         params   = {};
       }
       return relax({ db: db_name, att: att_name, method: 'GET', doc: doc_name
-                   , params: params, encoding: null},callback);
+                   , params: params, encoding: null, dont_parse: true},callback);
     }
 
    /*
